@@ -1,6 +1,6 @@
 
 
-import 'dart:io';
+// import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -82,6 +82,7 @@ class NotificationServices {
         print(message.data.toString()); // data = payload, extra data can be sent to payload
         print(message.data['type']);
         print(message.data['id']);
+        print(message.data['name']);
       }
 
 
@@ -213,11 +214,14 @@ class NotificationServices {
   // handle message
   void handleMessage (BuildContext context, RemoteMessage message){
 
+    print(message.data);
+
     // check the payload data & navigate
     if(message.data['type'] == 'message'){
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MessageScreen(
                 id: message.data['id'],
+                name: message.data['name'],
               ) ));
         }
   }

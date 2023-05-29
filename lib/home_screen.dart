@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_notification/notification_services.dart';
-
+// http
+import 'package:http/http.dart' as http;
 
 
 
@@ -59,6 +62,36 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: TextButton(
           onPressed: (){
+
+            // get token
+            notificationServices.getDeviceToken().then((value) async{
+              
+              var data = {
+                'to' : value.toString(),
+                'priority': 'high',
+                // notification
+                'notification' : {
+                  'title': 'notification title',
+                  'body' : 'This is notification body'
+                },
+                // payload
+                'data': {
+                  'type' : 'message',
+                  'id' : '123456',
+                  'name' : 'Talha',
+                  'status' : 'false',
+                }
+              };
+              
+              await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                body: jsonEncode(data),
+                headers: {
+                  'Content-type' : 'application/json; charset=UTF-8',
+                  'Authorization' : 'key=AAAAmZi3BIQ:APA91bHEbyZ46QWe0ghh6KeVQZg9JXweszmoZvv4lKhlolYZT1WUct2HDqtQ8C6BHF34KRCRF5DpsLq36qR2el3w5xfd87wiCLHyybZunk5Q45_CrysIL3GKJ3cYk7A7VrBcdxE-N3bm',
+                }
+              );
+            });
+
 
           },
           child: Text('Send Notifications'),
